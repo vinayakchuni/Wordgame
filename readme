@@ -1,0 +1,3 @@
+Wordgame is very similar to scrabble. In order to play the game you would have to download the file word1.txt and save both the Wordgame.py file and the words1.txt file in the same directory.
+If you have a mac you can play the game by going to the command prompt and typing the following
+python Wordgame.py
