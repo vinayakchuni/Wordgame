@@ -1,5 +1,6 @@
 
-
+import itertools
+from itertools import *
 import random
 import string
 
@@ -12,7 +13,7 @@ SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
 }
 
-#
+
 
 WORDLIST_FILENAME = "words1.txt"
 
@@ -48,7 +49,6 @@ def get_frequency_dict(sequence):
         freq[x] = freq.get(x,0) + 1
     return freq
 	
-
 
 
 def get_word_score(word, n):
@@ -98,13 +98,14 @@ def display_hand(hand):
     """
     for letter in hand.keys():
         for j in range(hand[letter]):
-             print letter,              # print all on the same line
-    print                               # print an empty line
+             print letter,              
+    print                               
     return ' '
 
 
 def deal_hand(n):
     """
+    
     Returns a random hand containing n lowercase letters.
     At least n/3 the letters in the hand should be VOWELS.
 
@@ -115,6 +116,7 @@ def deal_hand(n):
     n: int >= 0
     returns: dictionary (string -> int)
     """
+    global handr
     hand={}
     num_vowels = n / 3
     
@@ -125,6 +127,8 @@ def deal_hand(n):
     for i in range(num_vowels, n):    
         x = CONSONANTS[random.randrange(0,len(CONSONANTS))]
         hand[x] = hand.get(x, 0) + 1
+
+    handr=hand.copy()
         
     return hand
 
@@ -145,10 +149,13 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
+    global handr
     hand1=hand.copy()
     for i in word:
         if i in hand1.keys():
             hand1[i]=hand1.get(i)-1
+            if hand1[i]==0:
+                del hand1[i]
     return hand1
             
 
@@ -170,10 +177,11 @@ def is_valid_word(word, hand, word_list):
             hand1[i]=hand1[i]-1
         else:
             return False
-    for j in word_list:
-        if word in word_list:
-            return True
-    return False
+    if word in word_list:
+        return True
+    else:
+        return False
+
         
         
 
@@ -182,6 +190,11 @@ def calculate_handlen(hand):
     for v in hand.values():
         handlen += v
     return handlen
+def sum(hand):
+    sum=0
+    for i in hand.values():
+        sum=sum+i
+    return sum
 
 
 def play_hand(hand, word_list):
@@ -213,15 +226,16 @@ def play_hand(hand, word_list):
       
     """
     global HAND_SIZE
-##    HAND_SIZE=int(raw_input("Enter the hand size : "))
-##    hand=deal_hand(HAND_SIZE)
+
     global sum
+    
+    
     
     
     print display_hand(hand)
     word=raw_input("Enter a word :")
     if word=='.' :
-#To do:Exit if there is nothing left in the hand
+
         return Total_score
         
     
@@ -230,6 +244,21 @@ def play_hand(hand, word_list):
         
         
         hand=update_hand(hand,word)
+        print hand
+        print sum(hand)
+        if sum(hand)<8:
+            
+            k=0
+            for x in itertools.permutations(hand.keys(),len(hand.keys())):
+                
+                if string.join(x,'') in word_list:
+                    k=k+1
+            if k>0:
+                play_hand(hand,word_list)
+            else:
+                print"No more words are possible using the given letters.Exit by pressing '.'"
+                
+                
         play_hand(hand,word_list)
     else:
         print"You entered an incorrect word. Try again!"
@@ -254,7 +283,7 @@ def play_game(word_list):
     * If the user inputs 'n', let the user play a new (random) hand.
       When done playing the hand, ask the 'n' or 'e' question again.
 
- 
+    * If the user inputs 'r', let the user play the last hand again.
 
     * If the user inputs 'e', exit the game.
 
@@ -262,10 +291,10 @@ def play_game(word_list):
     
     """
     
-##    HAND_SIZE=random.randrange(6,14)
-##    hand=deal_hand(HAND_SIZE)
+
     print"Welcome to the game "
     print "Enter n to play a random hand"
+    print "Enter r to play the last hand again"
     print "Enter e to exit the game"
 
     user_input=raw_input("Enter the correct choice from the above menu: ")
@@ -274,7 +303,8 @@ def play_game(word_list):
     elif user_input=='e':
         print "Game Over"
         return ''
-    
+    elif user_input=='r':
+        play_hand(handr,word_list)
         
     else :
         play_game(word_list)
@@ -282,7 +312,7 @@ def play_game(word_list):
     print "Ready for the next hand!"
     play_game(word_list)
     
- #   play_hand(deal_hand(random.randrange(6,14)),word_list)
+ 
     
 
     return ''
@@ -298,5 +328,8 @@ def play_game(word_list):
 if __name__ == '__main__':
     word_list = load_words()
     play_game(word_list)
+
+
+
 
 
