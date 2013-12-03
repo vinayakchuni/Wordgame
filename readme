@@ -1,3 +1,13 @@
 Wordgame is very similar to scrabble. In order to play the game you would have to download the file word1.txt and save both the Wordgame.py file and the words1.txt file in the same directory.
 If you have a mac you can play the game by going to the command prompt and typing the following
 python Wordgame.py
+
+A little about the game:
+This is a very simple word game which many of you must have played when you were younger. The computer gives you a randomly chosen set of 6 to 14 letters which contain atleast 1/3 vowels. The player must form english words from the given list. Based on the table given below you get a score. Each english letter corresponds to a point . The letters which occur more frequently in THE ENGLISH LANGUAGE get lesser points than words which are rarer like 'Z' 
+
+SCRABBLE_LETTER_VALUES = {
+    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
+}
+
+If you use all the letters in one go you get a bonus 50 points
+I hope you would all enjoy playing the game
